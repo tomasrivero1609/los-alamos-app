@@ -34,6 +34,9 @@ services:
       PUBLIC_URL: "https://admin.losalamosindumentaria.com.ar"
     depends_on:
       - database
+    volumes:
+      - directus_uploads:/directus/uploads
 
 volumes:
   postgres_data:
+  directus_uploads:
