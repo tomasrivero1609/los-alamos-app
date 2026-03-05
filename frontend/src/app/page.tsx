@@ -7,7 +7,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { IndumentariaCarousel } from "@/components/IndumentariaCarousel";
 import { MarcasCarousel } from "@/components/MarcasCarousel";
 import { HeroTypewriter } from "@/components/HeroTypewriter";
-import { HeroVideo } from "@/components/HeroVideo";
+import { HeroLogo } from "@/components/HeroLogo";
 import { TestimoniosSection } from "@/components/TestimoniosSection";
 
 /** Testimonios: editá texto, autor y role en page.tsx (o después cargarlos desde CMS) */
@@ -42,10 +42,10 @@ export default async function Home() {
   const featuredProducts = await fetchFeaturedProducts(6);
   return (
     <main className="min-h-screen">
-      {/* Hero: video de fondo + Bienvenidos a Los Álamos */}
+      {/* Hero: imagen de fondo (logo) + Bienvenidos a Los Álamos */}
       <section id="hero" className="relative min-h-screen overflow-hidden">
-        {/* Video de fondo — subí tu archivo a public/hero-video.mp4 o reemplazá la ruta */}
-        <HeroVideo />
+        {/* Imagen de fondo: public/logo-los-alamos.jpeg */}
+        <HeroLogo />
         {/* Overlay oscuro para que se lea el texto */}
         <div className="absolute inset-0 bg-black/50" aria-hidden />
         <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center">
