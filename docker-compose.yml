@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:15
+    container_name: losalamos_db
+    restart: always
+    environment:
+      POSTGRES_DB: directus
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  directus:
+    image: directus/directus:latest
+    container_name: losalamos_directus
+    restart: always
+    ports:
+      - "127.0.0.1:8055:8055"
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: directus
+      DB_USER: directus
+      DB_PASSWORD: ${DB_PASSWORD}
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "https://losalamosindumentaria.com.ar"
+      PUBLIC_URL: "https://admin.losalamosindumentaria.com.ar"
+    depends_on:
+      - database
+
+volumes:
+  postgres_data:
