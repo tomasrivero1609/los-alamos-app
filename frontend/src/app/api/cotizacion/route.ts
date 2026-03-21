@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendCotizacionEmail } from "@/lib/mail";
 
 const getDirectusUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -28,22 +29,23 @@ export async function POST(request: Request) {
       );
     }
 
+    const cleaned = {
+      nombre: String(nombre).trim(),
+      email: String(email).trim(),
+      telefono: String(telefono).trim(),
+      empresa: String(empresa).trim() || null,
+      productos_interes: String(productos_interes).trim() || null,
+      cantidad_aprox: String(cantidad_aprox).trim() || null,
+      plazo_deseado: String(plazo_deseado).trim() || null,
+      comentarios: String(comentarios).trim() || null,
+      como_nos_conocio: String(como_nos_conocio).trim() || null,
+    };
+
     const directusUrl = getDirectusUrl();
     const res = await fetch(`${directusUrl}/items/cotizaciones`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nombre: String(nombre).trim(),
-        email: String(email).trim(),
-        telefono: String(telefono).trim(),
-        empresa: String(empresa).trim() || null,
-        productos_interes: String(productos_interes).trim() || null,
-        cantidad_aprox: String(cantidad_aprox).trim() || null,
-        plazo_deseado: String(plazo_deseado).trim() || null,
-        comentarios: String(comentarios).trim() || null,
-        como_nos_conocio: String(como_nos_conocio).trim() || null,
-        estado: "nueva",
-      }),
+      body: JSON.stringify({ ...cleaned, estado: "nueva" }),
     });
 
     if (!res.ok) {
@@ -54,6 +56,11 @@ export async function POST(request: Request) {
         { status: 502 }
       );
     }
+
+    // Enviar email de notificación (no bloquea la respuesta al usuario)
+    sendCotizacionEmail(cleaned).catch((err) =>
+      console.error("Error al enviar email de cotización:", err)
+    );
 
     return NextResponse.json({ ok: true });
   } catch (e) {

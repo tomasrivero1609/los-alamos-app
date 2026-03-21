@@ -1,4 +1,4 @@
-import type { Category, DirectusFile, Product } from "@/types/directus";
+import type { Category, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
 
 const getBaseUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -13,7 +13,7 @@ export async function fetchProducts(categorySlug?: string, limit?: number): Prom
   const params = new URLSearchParams();
   params.set("filter[is_active][_eq]", "true");
   params.set("sort", "sort_order,-id");
-  params.set("fields", "*,category.*,images.directus_files_id.*");
+  params.set("fields", "*,category.*,images.directus_files_id.*,color_variants.id,color_variants.sort_order,color_variants.disponibilidad,color_variants.color.id,color_variants.color.name,color_variants.color.hex");
 
   if (categorySlug) {
     params.set("filter[category][slug][_eq]", categorySlug);
@@ -40,7 +40,7 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
   const params = new URLSearchParams();
   params.set("filter[slug][_eq]", slug);
   params.set("filter[is_active][_eq]", "true");
-  params.set("fields", "*,category.*,images.directus_files_id.*");
+  params.set("fields", "*,category.*,images.directus_files_id.*,color_variants.*,color_variants.color.*,color_variants.images.directus_files_id.*");
   params.set("limit", "1");
 
   const res = await fetch(directusUrl(`/items/products?${params}`), {
@@ -134,6 +134,18 @@ export function getFichaTecnicaUrl(product: Product): string | null {
 /** Todos los IDs de imagen del producto (orden del M2M en Directus) */
 export function getProductImageIds(product: Product): string[] {
   const images = product.images;
+  if (!Array.isArray(images)) return [];
+  const ids: string[] = [];
+  for (const item of images) {
+    const id = extractFileIdFromItem(item);
+    if (id) ids.push(id);
+  }
+  return ids;
+}
+
+/** Todos los IDs de imagen de una variante de color */
+export function getVariantImageIds(variant: ProductColorVariant): string[] {
+  const images = variant.images;
   if (!Array.isArray(images)) return [];
   const ids: string[] = [];
   for (const item of images) {

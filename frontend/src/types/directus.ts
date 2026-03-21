@@ -21,6 +21,22 @@ export interface Category {
   products?: Product[];
 }
 
+export interface Color {
+  id: number;
+  name: string;
+  hex: string;
+  sort_order?: number;
+}
+
+export interface ProductColorVariant {
+  id: number;
+  product?: number | Product;
+  color: Color | number;
+  disponibilidad?: "disponible" | "sin_stock" | "proximamente";
+  images?: DirectusImageItem[];
+  sort_order?: number;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -37,6 +53,8 @@ export interface Product {
   uso_recomendado?: string | null;
   /** UUID del archivo de ficha técnica (en Directus: File, single) */
   ficha_tecnica?: string | null;
+  /** Variantes de color con imágenes propias y disponibilidad */
+  color_variants?: ProductColorVariant[];
 }
 
 export interface DirectusResponse<T> {

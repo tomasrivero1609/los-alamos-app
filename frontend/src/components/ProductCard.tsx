@@ -3,15 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import type { Product } from "@/types/directus";
+import type { Product, Color } from "@/types/directus";
 import { assetUrl, getFirstImageId } from "@/lib/directus";
 
 interface ProductCardProps {
   product: Product;
 }
 
+const MAX_VISIBLE_COLORS = 5;
+
+function getColors(product: Product): Color[] {
+  const variants = product.color_variants;
+  if (!Array.isArray(variants)) return [];
+  const colors: Color[] = [];
+  for (const v of variants) {
+    if (typeof v.color === "object" && v.color !== null) colors.push(v.color);
+  }
+  return colors;
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const imageId = getFirstImageId(product);
+  const colors = getColors(product);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -59,6 +72,23 @@ export function ProductCard({ product }: ProductCardProps) {
           </h2>
         </div>
       </Link>
+
+      {colors.length > 0 && (
+        <div className="flex items-center gap-1.5 px-3 py-2">
+          {colors.slice(0, MAX_VISIBLE_COLORS).map((c) => (
+            <span
+              key={c.id}
+              className="block h-4 w-4 rounded-full border border-zinc-300"
+              style={{ backgroundColor: c.hex }}
+              title={c.name}
+              aria-label={c.name}
+            />
+          ))}
+          {colors.length > MAX_VISIBLE_COLORS && (
+            <span className="text-xs text-zinc-500">+{colors.length - MAX_VISIBLE_COLORS}</span>
+          )}
+        </div>
+      )}
     </article>
   );
 }

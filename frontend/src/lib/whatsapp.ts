@@ -48,9 +48,10 @@ export function whatsappContactUrl(message?: string): string {
 }
 
 /** Enlace con mensaje prellenado por producto — usa la primera línea si existe */
-export function whatsappProductUrl(productName: string): string {
+export function whatsappProductUrl(productName: string, colorName?: string): string {
   const number = getWhatsAppNumber();
-  const msg = `Hola, me interesa el producto: ${productName}`;
+  const colorSuffix = colorName ? ` (color: ${colorName})` : "";
+  const msg = `Hola, me interesa el producto: ${productName}${colorSuffix}`;
   if (!number) {
     const lines = getWhatsAppLines();
     if (lines.length > 0) return whatsappUrl(lines[0].number, msg);
