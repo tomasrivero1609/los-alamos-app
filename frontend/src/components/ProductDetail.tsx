@@ -64,50 +64,6 @@ export function ProductDetail({ product }: ProductDetailProps) {
           {product.name}
         </h1>
 
-        {hasVariants && (
-          <div className="mt-4">
-            <p className="mb-2 text-sm font-medium text-zinc-700">
-              Color: <span className="font-semibold">{selectedColor?.name ?? "—"}</span>
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {variants.map((variant, idx) => {
-                const color = resolveColor(variant);
-                if (!color) return null;
-                const isSelected = idx === selectedIndex;
-                const outOfStock = variant.disponibilidad === "sin_stock";
-
-                return (
-                  <button
-                    key={variant.id}
-                    type="button"
-                    onClick={() => setSelectedIndex(idx)}
-                    className={`relative h-9 w-9 cursor-pointer rounded-full border-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 ${
-                      isSelected
-                        ? "border-[var(--brand)] ring-1 ring-[var(--brand)]"
-                        : "border-zinc-300 hover:border-zinc-400"
-                    }`}
-                    style={{ backgroundColor: color.hex }}
-                    aria-label={`${color.name}${outOfStock ? " (sin stock)" : ""}`}
-                    title={`${color.name}${outOfStock ? " — sin stock" : ""}`}
-                  >
-                    {outOfStock && (
-                      <span className="absolute inset-0 flex items-center justify-center" aria-hidden>
-                        <span className="block h-[2px] w-full rotate-45 bg-zinc-500/80 rounded" />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-            {disponibilidad === "sin_stock" && (
-              <p className="mt-2 text-sm font-medium text-red-600">Sin stock en este color</p>
-            )}
-            {disponibilidad === "proximamente" && (
-              <p className="mt-2 text-sm font-medium text-amber-600">Próximamente disponible</p>
-            )}
-          </div>
-        )}
-
         {fichaTecnicaUrl && (
           <a
             href={fichaTecnicaUrl}
@@ -147,6 +103,50 @@ export function ProductDetail({ product }: ProductDetailProps) {
           <div className="mt-6">
             <h2 className="text-base font-semibold uppercase tracking-wide text-[var(--brand)]">Uso recomendado</h2>
             <p className="mt-2 text-lg text-zinc-600">{product.uso_recomendado}</p>
+          </div>
+        )}
+
+        {hasVariants && (
+          <div className="mt-6">
+            <p className="mb-2 text-sm font-medium text-zinc-700">
+              Color: <span className="font-semibold">{selectedColor?.name ?? "—"}</span>
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {variants.map((variant, idx) => {
+                const color = resolveColor(variant);
+                if (!color) return null;
+                const isSelected = idx === selectedIndex;
+                const outOfStock = variant.disponibilidad === "sin_stock";
+
+                return (
+                  <button
+                    key={variant.id}
+                    type="button"
+                    onClick={() => setSelectedIndex(idx)}
+                    className={`relative h-9 w-9 cursor-pointer rounded-full border-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 ${
+                      isSelected
+                        ? "border-[var(--brand)] ring-1 ring-[var(--brand)]"
+                        : "border-zinc-300 hover:border-zinc-400"
+                    }`}
+                    style={{ backgroundColor: color.hex }}
+                    aria-label={`${color.name}${outOfStock ? " (sin stock)" : ""}`}
+                    title={`${color.name}${outOfStock ? " — sin stock" : ""}`}
+                  >
+                    {outOfStock && (
+                      <span className="absolute inset-0 flex items-center justify-center" aria-hidden>
+                        <span className="block h-[2px] w-full rotate-45 bg-zinc-500/80 rounded" />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            {disponibilidad === "sin_stock" && (
+              <p className="mt-2 text-sm font-medium text-red-600">Sin stock en este color</p>
+            )}
+            {disponibilidad === "proximamente" && (
+              <p className="mt-2 text-sm font-medium text-amber-600">Próximamente disponible</p>
+            )}
           </div>
         )}
 
