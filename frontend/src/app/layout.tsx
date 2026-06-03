@@ -16,8 +16,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LOS ÁLAMOS — Indumentaria laboral",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  title: {
+    default: "LOS ÁLAMOS — Indumentaria laboral",
+    template: "%s — LOS ÁLAMOS",
+  },
   description: "Catálogo de indumentaria laboral. Consultas por WhatsApp.",
+  openGraph: {
+    type: "website",
+    siteName: "Los Álamos",
+    title: "LOS ÁLAMOS — Indumentaria laboral",
+    description: "Catálogo de indumentaria laboral. Consultas por WhatsApp.",
+  },
 };
 
 export default async function RootLayout({

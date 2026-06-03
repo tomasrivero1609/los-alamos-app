@@ -9,8 +9,12 @@ const nextConfig: NextConfig = {
         port: "8055",
         pathname: "/assets/**",
       },
-      // En producción añadir tu dominio de Directus (ej. cms.tudominio.com)
-      // { protocol: "https", hostname: "cms.tudominio.com", pathname: "/assets/**" },
+      // Directus de producción (assets servidos desde el panel)
+      {
+        protocol: "https",
+        hostname: "admin.losalamosindumentaria.com.ar",
+        pathname: "/assets/**",
+      },
       {
         protocol: "https",
         hostname: "framerusercontent.com",

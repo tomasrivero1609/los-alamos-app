@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export default function CotizacionPage() {
   const [sending, setSending] = useState(false);
@@ -50,16 +51,17 @@ export default function CotizacionPage() {
     <main className="mx-auto max-w-2xl px-4 py-20">
       <Link
         href="/"
-        className="mb-8 inline-block text-sm text-zinc-600 hover:underline"
+        className="mb-8 inline-block text-sm text-ink-soft hover:text-ink"
       >
         ← Volver al inicio
       </Link>
 
       <header className="mb-12">
-        <h1 className="text-2xl font-bold uppercase tracking-tight text-[var(--brand)] sm:text-3xl md:text-4xl">
+        <Eyebrow>Cotización</Eyebrow>
+        <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
           Pedir cotización
         </h1>
-        <p className="mt-4 text-base text-zinc-600 sm:text-lg">
+        <p className="mt-4 text-base text-ink-soft sm:text-lg">
           Contanos qué necesitás y te respondemos con una cotización a medida. No te olvides de indicar productos de interés, cantidades aproximadas y plazos si los tenés.
         </p>
       </header>
@@ -87,7 +89,7 @@ export default function CotizacionPage() {
           )}
 
           <div>
-            <label htmlFor="nombre" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="nombre" className="block text-sm font-medium text-ink">
               Nombre *
             </label>
             <input
@@ -95,12 +97,12 @@ export default function CotizacionPage() {
               name="nombre"
               type="text"
               required
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="email" className="block text-sm font-medium text-ink">
               Email *
             </label>
             <input
@@ -108,12 +110,12 @@ export default function CotizacionPage() {
               name="email"
               type="email"
               required
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="telefono" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="telefono" className="block text-sm font-medium text-ink">
               Teléfono *
             </label>
             <input
@@ -121,24 +123,24 @@ export default function CotizacionPage() {
               name="telefono"
               type="tel"
               required
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="empresa" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="empresa" className="block text-sm font-medium text-ink">
               Empresa / Razón social
             </label>
             <input
               id="empresa"
               name="empresa"
               type="text"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="productos_interes" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="productos_interes" className="block text-sm font-medium text-ink">
               Productos de interés
             </label>
             <textarea
@@ -146,12 +148,12 @@ export default function CotizacionPage() {
               name="productos_interes"
               rows={3}
               placeholder="Ej.: camperas, pantalones, buzos..."
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="cantidad_aprox" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="cantidad_aprox" className="block text-sm font-medium text-ink">
               Cantidad aproximada
             </label>
             <input
@@ -159,12 +161,12 @@ export default function CotizacionPage() {
               name="cantidad_aprox"
               type="text"
               placeholder="Ej.: 50 unidades, 100-200"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="plazo_deseado" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="plazo_deseado" className="block text-sm font-medium text-ink">
               Plazo deseado
             </label>
             <input
@@ -172,18 +174,18 @@ export default function CotizacionPage() {
               name="plazo_deseado"
               type="text"
               placeholder="Ej.: marzo 2026, urgente"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <div>
-            <label htmlFor="como_nos_conocio" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="como_nos_conocio" className="block text-sm font-medium text-ink">
               ¿Cómo nos conoció?
             </label>
             <select
               id="como_nos_conocio"
               name="como_nos_conocio"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             >
               <option value="">Seleccionar</option>
               <option value="Web">Web</option>
@@ -194,7 +196,7 @@ export default function CotizacionPage() {
           </div>
 
           <div>
-            <label htmlFor="comentarios" className="block text-sm font-medium text-zinc-800">
+            <label htmlFor="comentarios" className="block text-sm font-medium text-ink">
               Comentarios / Requisitos especiales
             </label>
             <textarea
@@ -202,14 +204,14 @@ export default function CotizacionPage() {
               name="comentarios"
               rows={4}
               placeholder="Talles especiales, colores, logística, etc."
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="mt-1 w-full rounded-lg border border-line px-4 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
             />
           </div>
 
           <button
             type="submit"
             disabled={sending}
-            className="w-full rounded-lg bg-[var(--brand)] px-6 py-3 font-medium text-white transition hover:bg-[var(--brand-hover)] disabled:opacity-60"
+            className="w-full rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-60"
           >
             {sending ? "Enviando…" : "Enviar solicitud de cotización"}
           </button>
