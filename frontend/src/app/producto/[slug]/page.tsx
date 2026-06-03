@@ -31,13 +31,14 @@ export default async function ProductoPage({ params }: Props) {
   if (!product) notFound();
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pt-16 pb-8">
-      <Link
-        href="/productos"
-        className="mb-6 inline-block text-base text-zinc-600 hover:underline"
-      >
-        ← Volver al catálogo
-      </Link>
+    <main className="mx-auto max-w-7xl px-4 py-12 pb-28 lg:pb-12">
+      <nav className="mb-6 text-sm text-ink-soft" aria-label="Migas de pan">
+        <Link href="/" className="hover:text-ink">Inicio</Link>
+        <span className="mx-2" aria-hidden>/</span>
+        <Link href="/productos" className="hover:text-ink">Catálogo</Link>
+        <span className="mx-2" aria-hidden>/</span>
+        <span className="text-ink">{product.name}</span>
+      </nav>
 
       <ProductDetail product={product} />
     </main>
