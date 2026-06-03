@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const STORAGE_KEY = "admin_cotizaciones_key";
 
@@ -27,8 +28,11 @@ export default function AdminCotizacionesPage() {
   const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<Cotizacion[]>([]);
 
+  // Sincroniza la clave guardada al montar (sessionStorage es solo de cliente).
+  // Es el patrón SSR-safe: setear en efecto evita un hydration mismatch del input controlado.
   useEffect(() => {
     const stored = typeof window !== "undefined" ? sessionStorage.getItem(STORAGE_KEY) : null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync desde sessionStorage al montar
     if (stored) setInputKey(stored);
   }, []);
 
@@ -92,10 +96,11 @@ export default function AdminCotizacionesPage() {
 
   if (!key) {
     return (
-      <main className="mx-auto max-w-md px-4 pt-24 pb-20">
-        <div className="rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
-          <h1 className="text-xl font-bold text-zinc-900">Acceso administrador</h1>
-          <p className="mt-2 text-sm text-zinc-600">
+      <main className="mx-auto max-w-md px-4 py-20">
+        <div className="rounded-2xl border border-line bg-white p-8 shadow-sm">
+          <Eyebrow>Admin</Eyebrow>
+          <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-ink">Acceso administrador</h1>
+          <p className="mt-2 text-sm text-ink-soft">
             Ingresá la clave para ver las cotizaciones.
           </p>
           <form onSubmit={handleSubmit} className="mt-6">
@@ -108,7 +113,7 @@ export default function AdminCotizacionesPage() {
               value={inputKey}
               onChange={(e) => setInputKey(e.target.value)}
               placeholder="Clave"
-              className="w-full rounded-lg border border-zinc-300 px-4 py-2.5 text-zinc-900 focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)]"
+              className="w-full rounded-lg border border-line px-4 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand"
               autoFocus
             />
             {error && (
@@ -117,14 +122,14 @@ export default function AdminCotizacionesPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-4 w-full rounded-lg bg-[var(--brand)] px-4 py-2.5 font-medium text-white hover:bg-[var(--brand-hover)] disabled:opacity-60"
+              className="mt-4 w-full rounded-lg bg-brand px-4 py-2.5 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-60"
             >
               {loading ? "Verificando…" : "Entrar"}
             </button>
           </form>
         </div>
         <p className="mt-6 text-center">
-          <Link href="/" className="text-sm text-zinc-600 hover:underline">
+          <Link href="/" className="text-sm text-ink-soft hover:text-ink">
             ← Volver al inicio
           </Link>
         </p>
@@ -133,24 +138,27 @@ export default function AdminCotizacionesPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 pt-24 pb-12">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold uppercase tracking-tight text-[var(--brand)]">
-          Cotizaciones recibidas
-        </h1>
+    <main className="mx-auto max-w-5xl px-4 py-16">
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Eyebrow>Admin</Eyebrow>
+          <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
+            Cotizaciones recibidas
+          </h1>
+        </div>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={refresh}
             disabled={loading}
-            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-60"
+            className="rounded-lg border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
           >
             Actualizar
           </button>
           <button
             type="button"
             onClick={handleSalir}
-            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+            className="rounded-lg border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface"
           >
             Salir
           </button>
@@ -162,25 +170,25 @@ export default function AdminCotizacionesPage() {
       )}
 
       {items.length === 0 && !loading ? (
-        <p className="rounded-xl border border-zinc-200 bg-zinc-50 p-8 text-center text-zinc-600">
+        <p className="rounded-xl border border-line bg-surface p-8 text-center text-ink-soft">
           No hay cotizaciones aún.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-line bg-white">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 bg-zinc-50">
-                <th className="px-4 py-3 font-semibold text-zinc-800">Fecha</th>
-                <th className="px-4 py-3 font-semibold text-zinc-800">Nombre</th>
-                <th className="px-4 py-3 font-semibold text-zinc-800">Email</th>
-                <th className="px-4 py-3 font-semibold text-zinc-800">Teléfono</th>
-                <th className="px-4 py-3 font-semibold text-zinc-800">Estado</th>
+              <tr className="border-b border-line bg-surface">
+                <th className="px-4 py-3 font-semibold text-ink">Fecha</th>
+                <th className="px-4 py-3 font-semibold text-ink">Nombre</th>
+                <th className="px-4 py-3 font-semibold text-ink">Email</th>
+                <th className="px-4 py-3 font-semibold text-ink">Teléfono</th>
+                <th className="px-4 py-3 font-semibold text-ink">Estado</th>
               </tr>
             </thead>
             <tbody>
               {items.map((row) => (
-                <tr key={row.id} className="border-b border-zinc-100 hover:bg-zinc-50">
-                  <td className="px-4 py-3 text-zinc-600">
+                <tr key={row.id} className="border-b border-line hover:bg-surface">
+                  <td className="px-4 py-3 text-ink-soft">
                     {row.date_created
                       ? new Date(row.date_created).toLocaleDateString("es-AR", {
                           day: "2-digit",
@@ -191,14 +199,14 @@ export default function AdminCotizacionesPage() {
                         })
                       : "—"}
                   </td>
-                  <td className="px-4 py-3 font-medium text-zinc-900">{row.nombre}</td>
+                  <td className="px-4 py-3 font-medium text-ink">{row.nombre}</td>
                   <td className="px-4 py-3">
-                    <a href={`mailto:${row.email}`} className="text-[var(--brand)] hover:underline">
+                    <a href={`mailto:${row.email}`} className="text-brand hover:underline">
                       {row.email}
                     </a>
                   </td>
-                  <td className="px-4 py-3">{row.telefono}</td>
-                  <td className="px-4 py-3 capitalize text-zinc-600">{row.estado ?? "—"}</td>
+                  <td className="px-4 py-3 text-ink-soft">{row.telefono}</td>
+                  <td className="px-4 py-3 capitalize text-ink-soft">{row.estado ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -207,39 +215,39 @@ export default function AdminCotizacionesPage() {
       )}
 
       {items.length > 0 && (
-        <details className="mt-8 rounded-xl border border-zinc-200 bg-zinc-50/50">
-          <summary className="cursor-pointer px-4 py-3 font-medium text-zinc-800">
+        <details className="mt-8 rounded-xl border border-line bg-surface">
+          <summary className="cursor-pointer px-4 py-3 font-semibold text-ink">
             Ver detalle completo (expandir por cotización)
           </summary>
-          <div className="divide-y border-t border-zinc-200 p-4">
+          <div className="divide-y divide-line border-t border-line p-4">
             {items.map((row) => (
               <div key={row.id} className="py-4 first:pt-0">
-                <p className="font-semibold text-zinc-900">
+                <p className="font-semibold text-ink">
                   #{row.id} — {row.nombre}
                   {row.empresa ? ` (${row.empresa})` : ""}
                 </p>
-                <p className="mt-1 text-zinc-600">
+                <p className="mt-1 text-ink-soft">
                   {row.email} · {row.telefono}
                 </p>
                 {row.productos_interes && (
-                  <p className="mt-2 text-sm">
-                    <span className="font-medium text-zinc-700">Productos:</span>{" "}
+                  <p className="mt-2 text-sm text-ink-soft">
+                    <span className="font-medium text-ink">Productos:</span>{" "}
                     {row.productos_interes}
                   </p>
                 )}
                 {(row.cantidad_aprox || row.plazo_deseado) && (
-                  <p className="mt-1 text-sm text-zinc-600">
+                  <p className="mt-1 text-sm text-ink-soft">
                     Cantidad: {row.cantidad_aprox || "—"} · Plazo: {row.plazo_deseado || "—"}
                   </p>
                 )}
                 {row.como_nos_conocio && (
-                  <p className="mt-1 text-sm text-zinc-600">
+                  <p className="mt-1 text-sm text-ink-soft">
                     Nos conoció por: {row.como_nos_conocio}
                   </p>
                 )}
                 {row.comentarios && (
-                  <p className="mt-2 text-sm text-zinc-600">
-                    <span className="font-medium text-zinc-700">Comentarios:</span>{" "}
+                  <p className="mt-2 text-sm text-ink-soft">
+                    <span className="font-medium text-ink">Comentarios:</span>{" "}
                     {row.comentarios}
                   </p>
                 )}
@@ -250,7 +258,7 @@ export default function AdminCotizacionesPage() {
       )}
 
       <p className="mt-8">
-        <Link href="/" className="text-sm text-zinc-600 hover:underline">
+        <Link href="/" className="text-sm text-ink-soft hover:text-ink">
           ← Volver al inicio
         </Link>
       </p>
