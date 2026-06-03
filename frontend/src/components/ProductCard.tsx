@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product, Color } from "@/types/directus";
-import { assetUrl, getFirstImageId } from "@/lib/directus";
+import { assetUrl, getFirstImageId, assetsAreLocal } from "@/lib/directus";
 
 interface ProductCardProps {
   product: Product;
@@ -37,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
             fill
             className="object-cover object-center transition duration-300 motion-safe:group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            unoptimized
+            unoptimized={assetsAreLocal()}
           />
         ) : (
           <div className="flex h-full items-center justify-center text-ink-soft">

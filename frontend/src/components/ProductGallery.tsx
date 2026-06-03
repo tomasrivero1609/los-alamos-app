@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { assetUrl } from "@/lib/directus";
+import { assetUrl, assetsAreLocal } from "@/lib/directus";
 
 const LightboxImg = ({ src, alt }: { src: string; alt: string }) => (
   // eslint-disable-next-line @next/next/no-img-element -- lightbox: tamaño natural, fuera de optimización
@@ -52,7 +52,7 @@ export function ProductGallery({ imageIds, productName }: ProductGalleryProps) {
               fill
               className="object-cover object-center transition hover:opacity-90"
               sizes="(max-width: 640px) 50vw, 45vw"
-              unoptimized
+              unoptimized={assetsAreLocal()}
             />
           </button>
         ))}

@@ -73,6 +73,21 @@ export function assetUrl(fileId: string | undefined | null): string {
   return directusUrl(`/assets/${fileId}`);
 }
 
+/**
+ * ¿El Directus configurado es un host local/privado?
+ * Next 16 bloquea la optimización de imágenes cuyo host resuelve a IP privada
+ * (protección anti-SSRF). En esos casos servimos sin optimizar; en producción
+ * (host público) la optimización de next/image funciona normalmente.
+ */
+export function assetsAreLocal(): boolean {
+  const url = process.env.NEXT_PUBLIC_DIRECTUS_URL || "";
+  return (
+    url.includes("localhost") ||
+    url.includes("127.0.0.1") ||
+    url.includes("0.0.0.0")
+  );
+}
+
 /** Primera imagen del producto (objeto expandido); puede ser null */
 export function getFirstImage(product: Product): DirectusFile | null {
   const images = product.images;
