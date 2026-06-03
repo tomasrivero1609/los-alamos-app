@@ -5,17 +5,28 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  /* Verde topo (marca) — header, títulos, botones, links, focus */
-  --brand: #4a5d4a;
-  --brand-hover: #3a4a3a;
+  --foreground: #111111;
+
+  /* Sistema Editorial Minimal · Verde heritage */
+  --ink: #111111;        /* texto / titulares */
+  --ink-soft: #52525b;   /* cuerpo secundario */
+  --brand: #3f5840;      /* acento protagonista (reemplaza #4a5d4a) */
+  --brand-hover: #324530;
+  --brand-tint: #eef2ec; /* washes suaves */
+  --surface: #fafafa;    /* secciones alternas sutiles */
+  --line: #ececec;       /* bordes hairline */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
+  --color-brand-tint: var(--brand-tint);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -24,6 +35,24 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Eyebrow / kicker editorial */
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+/* Titular display fluido (hero) */
+.display {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: var(--ink);
 }
 
 @keyframes marquee {
@@ -44,9 +73,4 @@ body {
   .animate-marquee {
     animation: none;
   }
-}
-
-/* Brillo del nombre del producto al hacer hover en la card */
-.group:hover .card-title-glow {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.35);
 }
