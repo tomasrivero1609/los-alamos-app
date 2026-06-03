@@ -6,9 +6,10 @@ import { TextCarousel } from "@/components/TextCarousel";
 import { ProductCard } from "@/components/ProductCard";
 import { IndumentariaCarousel } from "@/components/IndumentariaCarousel";
 import { MarcasCarousel } from "@/components/MarcasCarousel";
-import { HeroTypewriter } from "@/components/HeroTypewriter";
 import { HeroLogo } from "@/components/HeroLogo";
 import { TestimoniosSection } from "@/components/TestimoniosSection";
+import { Button } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 /** Testimonios: editá texto, autor y role en page.tsx (o después cargarlos desde CMS) */
 const TESTIMONIOS = [
@@ -42,26 +43,23 @@ export default async function Home() {
   const featuredProducts = await fetchFeaturedProducts(6);
   return (
     <main className="min-h-screen">
-      {/* Hero: imagen de fondo (logo) + Bienvenidos a Los Álamos */}
-      <section id="hero" className="relative min-h-screen overflow-hidden">
-        {/* Imagen de fondo: public/logo-los-alamos.jpeg */}
-        <HeroLogo />
-        {/* Overlay oscuro para que se lea el texto */}
-        <div className="absolute inset-0 bg-black/50" aria-hidden />
-        <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-md sm:text-5xl md:text-6xl">
-            Bienvenidos a Los Álamos
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-white/90 drop-shadow">
-            Indumentaria laboral para tu equipo
-          </p>
-          <HeroTypewriter />
-          <Link
-            href="/productos"
-            className="mt-8 inline-block cursor-pointer rounded-lg bg-white px-6 py-3 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/30"
-          >
-            Ver indumentaria
-          </Link>
+      {/* Hero editorial: eyebrow + titular display + CTAs, foto a la derecha */}
+      <section id="hero" className="relative overflow-hidden border-b border-line">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-2 md:py-28">
+          <div>
+            <Eyebrow>Indumentaria laboral</Eyebrow>
+            <h1 className="display mt-4">Ropa de trabajo que rinde todos los días.</h1>
+            <p className="mt-5 max-w-md text-base text-ink-soft sm:text-lg">
+              Equipamos a tu equipo con prendas resistentes, cómodas y a buen precio. Envíos a todo el país.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button href="/productos" variant="primary">Ver catálogo</Button>
+              <Button href="/cotizacion" variant="secondary">Pedir cotización</Button>
+            </div>
+          </div>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface">
+            <HeroLogo />
+          </div>
         </div>
       </section>
 
