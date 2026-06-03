@@ -95,8 +95,8 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
 
   if (items.length === 0) {
     return (
-      <div className="flex h-28 w-full items-center justify-center rounded-xl bg-zinc-100 text-zinc-500">
-        Agregá logos en <code className="mx-1 rounded bg-zinc-200 px-1.5 py-0.5 text-sm">public/marcas/</code> y referenciálos en la página.
+      <div className="flex h-28 w-full items-center justify-center rounded-xl bg-surface text-ink-soft">
+        Agregá logos en <code className="mx-1 rounded bg-white px-1.5 py-0.5 text-sm">public/marcas/</code> y referenciálos en la página.
       </div>
     );
   }
@@ -121,7 +121,7 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
         {duplicated.map((item, i) => (
           <div
             key={`${item.src}-${i}`}
-            className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-zinc-200/80 bg-white px-4 py-3 shadow-sm transition hover:border-zinc-300 hover:shadow-md"
+            className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-line bg-white px-4 py-3 transition hover:shadow-md"
             style={{ width: SLIDE_WIDTH, height: SLIDE_HEIGHT }}
           >
             {item.href ? (
@@ -129,7 +129,7 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-full w-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 rounded"
+                className="flex h-full w-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded"
               >
                 <Image
                   src={item.src}

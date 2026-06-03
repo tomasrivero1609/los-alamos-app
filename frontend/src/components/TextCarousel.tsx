@@ -14,7 +14,7 @@ export function TextCarousel() {
   return (
     <section
       id="carousel"
-      className="relative w-full overflow-hidden bg-[var(--brand)] py-2.5"
+      className="relative w-full overflow-hidden bg-brand py-2.5"
       aria-label="Mensajes destacados"
     >
       <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">

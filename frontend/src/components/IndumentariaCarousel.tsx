@@ -92,7 +92,7 @@ export function IndumentariaCarousel({ images }: IndumentariaCarouselProps) {
 
   if (images.length === 0) {
     return (
-      <div className="flex h-[320px] w-full items-center justify-center rounded-xl bg-zinc-100 text-zinc-500">
+      <div className="flex h-[320px] w-full items-center justify-center rounded-xl bg-surface text-ink-soft">
         Agregá fotos en la configuración del carrusel.
       </div>
     );
@@ -119,7 +119,7 @@ export function IndumentariaCarousel({ images }: IndumentariaCarouselProps) {
         {duplicated.map((img, i) => (
           <div
             key={i}
-            className="relative shrink-0 overflow-hidden rounded-lg bg-zinc-100 shadow-md"
+            className="relative shrink-0 overflow-hidden rounded-lg bg-surface shadow-md"
             style={{ width: SLIDE_WIDTH, height: SLIDE_HEIGHT }}
           >
             <Image
