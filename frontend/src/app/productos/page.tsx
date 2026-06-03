@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { fetchCategories, fetchProducts } from "@/lib/directus";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
@@ -5,6 +6,22 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 
 interface ProductosProps {
   searchParams: Promise<{ categoria?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: ProductosProps): Promise<Metadata> {
+  const { categoria } = await searchParams;
+  if (categoria) {
+    const categories = await fetchCategories();
+    const name = categories.find((c) => c.slug === categoria)?.name ?? categoria;
+    return {
+      title: name,
+      description: `Indumentaria laboral — ${name}. Mirá el catálogo de Los Álamos y consultá por WhatsApp.`,
+    };
+  }
+  return {
+    title: "Catálogo",
+    description: "Catálogo completo de indumentaria laboral de Los Álamos. Consultá por WhatsApp.",
+  };
 }
 
 export default async function ProductosPage({ searchParams }: ProductosProps) {
