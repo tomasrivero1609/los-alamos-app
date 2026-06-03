@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { assetUrl } from "@/lib/directus";
 
-// eslint-disable-next-line @next/next/no-img-element -- lightbox: tamaño natural
 const LightboxImg = ({ src, alt }: { src: string; alt: string }) => (
+  // eslint-disable-next-line @next/next/no-img-element -- lightbox: tamaño natural, fuera de optimización
   <img src={src} alt={alt} className="max-h-[90vh] w-auto max-w-[90vw] object-contain" />
 );
 
@@ -29,7 +29,7 @@ export function ProductGallery({ imageIds, productName }: ProductGalleryProps) {
 
   if (imageIds.length === 0) {
     return (
-      <div className="flex aspect-[3/4] w-full items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500">
+      <div className="flex aspect-[3/4] w-full items-center justify-center rounded-xl bg-surface text-ink-soft">
         Sin imágenes
       </div>
     );
@@ -43,7 +43,7 @@ export function ProductGallery({ imageIds, productName }: ProductGalleryProps) {
           <button
             key={id}
             type="button"
-            className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-400"
+            className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand"
             onClick={() => setLightboxIndex(index)}
           >
             <Image
