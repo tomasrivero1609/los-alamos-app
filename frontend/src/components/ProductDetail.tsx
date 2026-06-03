@@ -5,6 +5,7 @@ import type { Product, ProductColorVariant, Color } from "@/types/directus";
 import { getProductImageIds, getVariantImageIds, getFichaTecnicaUrl } from "@/lib/directus";
 import { whatsappProductUrl } from "@/lib/whatsapp";
 import { ProductGallery } from "./ProductGallery";
+import { Button } from "@/components/ui/Button";
 
 interface ProductDetailProps {
   product: Product;
@@ -58,9 +59,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
       <div className="lg:sticky lg:top-24">
         {category && (
-          <p className="text-base text-zinc-500">{category.name}</p>
+          <p className="text-sm text-ink-soft">{category.name}</p>
         )}
-        <h1 className="mt-1 text-2xl font-bold uppercase tracking-tight text-[var(--brand)] sm:text-3xl">
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
           {product.name}
         </h1>
 
@@ -69,7 +70,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             href={fichaTecnicaUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[var(--brand)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--brand-hover)]"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-ink px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-ink hover:text-white"
           >
             Ficha técnica
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -80,9 +81,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
         {product.description && (
           <div className="mt-6">
-            <h2 className="text-base font-semibold uppercase tracking-wide text-[var(--brand)]">Descripción</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Descripción</h2>
             <div
-              className="mt-2 text-lg text-zinc-600 [&>p]:mb-2"
+              className="mt-2 text-base text-ink-soft [&>p]:mb-2"
               dangerouslySetInnerHTML={{ __html: String(product.description).replace(/\n/g, "<br />") }}
             />
           </div>
@@ -90,8 +91,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
         {caracteristicasList.length > 0 && (
           <div className="mt-6">
-            <h2 className="text-base font-semibold uppercase tracking-wide text-[var(--brand)]">Características</h2>
-            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-lg text-zinc-600">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Características</h2>
+            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-base text-ink-soft">
               {caracteristicasList.map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
@@ -101,14 +102,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
         {product.uso_recomendado && (
           <div className="mt-6">
-            <h2 className="text-base font-semibold uppercase tracking-wide text-[var(--brand)]">Uso recomendado</h2>
-            <p className="mt-2 text-lg text-zinc-600">{product.uso_recomendado}</p>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Uso recomendado</h2>
+            <p className="mt-2 text-base text-ink-soft">{product.uso_recomendado}</p>
           </div>
         )}
 
         {hasVariants && (
           <div className="mt-6">
-            <p className="mb-2 text-sm font-medium text-zinc-700">
+            <p className="mb-2 text-sm font-medium text-ink">
               Color: <span className="font-semibold">{selectedColor?.name ?? "—"}</span>
             </p>
             <div className="flex flex-wrap gap-2">
@@ -123,10 +124,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
                     key={variant.id}
                     type="button"
                     onClick={() => setSelectedIndex(idx)}
-                    className={`relative h-9 w-9 cursor-pointer rounded-full border-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 ${
+                    className={`relative h-9 w-9 cursor-pointer rounded-full border-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 ${
                       isSelected
-                        ? "border-[var(--brand)] ring-1 ring-[var(--brand)]"
-                        : "border-zinc-300 hover:border-zinc-400"
+                        ? "border-ink ring-1 ring-ink"
+                        : "border-line hover:border-ink"
                     }`}
                     style={{ backgroundColor: color.hex }}
                     aria-label={`${color.name}${outOfStock ? " (sin stock)" : ""}`}
@@ -151,19 +152,33 @@ export function ProductDetail({ product }: ProductDetailProps) {
         )}
 
         {price != null && !Number.isNaN(price) && (
-          <p className="mt-6 text-xl font-medium text-[var(--brand)]">
+          <p className="mt-6 text-xl font-semibold text-ink">
             ${price.toLocaleString("es-AR")}
           </p>
         )}
 
-        <a
+        {/* Desktop: CTA inline */}
+        <div className="mt-6 hidden lg:block">
+          <Button
+            href={whatsappProductUrl(product.name, selectedColor?.name)}
+            external
+            variant="whatsapp"
+          >
+            Consultar por WhatsApp
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile: CTA sticky abajo */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 p-3 backdrop-blur lg:hidden">
+        <Button
           href={whatsappProductUrl(product.name, selectedColor?.name)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 py-3 font-medium text-white transition hover:bg-[#20BD5A]"
+          external
+          variant="whatsapp"
+          className="w-full"
         >
-          Consultar por WhatsApp
-        </a>
+          Consultar por WhatsApp{selectedColor?.name ? ` · ${selectedColor.name}` : ""}
+        </Button>
       </div>
     </div>
   );
