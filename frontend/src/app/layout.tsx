@@ -18,15 +18,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
-    default: "LOS ÁLAMOS — Indumentaria laboral",
-    template: "%s — LOS ÁLAMOS",
+    default: "Los Álamos · Indumentaria y ropa de trabajo",
+    template: "%s · Los Álamos",
   },
-  description: "Catálogo de indumentaria laboral. Consultas por WhatsApp.",
+  description:
+    "Indumentaria laboral y ropa de trabajo para empresas y equipos: camperas, pantalones, buzos y más. Calidad durable, envíos a todo el país. Consultá por WhatsApp.",
   openGraph: {
     type: "website",
     siteName: "Los Álamos",
-    title: "LOS ÁLAMOS — Indumentaria laboral",
-    description: "Catálogo de indumentaria laboral. Consultas por WhatsApp.",
+    title: "Los Álamos · Indumentaria y ropa de trabajo",
+    description:
+      "Indumentaria laboral y ropa de trabajo para empresas y equipos: camperas, pantalones, buzos y más. Calidad durable, envíos a todo el país. Consultá por WhatsApp.",
   },
 };
 

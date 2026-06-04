@@ -2,6 +2,7 @@ import Link from "next/link";
 import { fetchCategories } from "@/lib/directus";
 import { whatsappContactUrl } from "@/lib/whatsapp";
 import { NavLinks } from "./NavLinks";
+import { Logo } from "./ui/Logo";
 
 export async function Header() {
   const categories = await fetchCategories();
@@ -16,9 +17,10 @@ export async function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-4 py-3.5">
         <Link
           href="/"
-          className="text-lg font-extrabold tracking-tight text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+          aria-label="Los Álamos — inicio"
+          className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
         >
-          los álamos<span className="text-brand">.</span>
+          <Logo variant="full" />
         </Link>
         <NavLinks categories={categories} socialLinks={socialLinks} />
       </div>

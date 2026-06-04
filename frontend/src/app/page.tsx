@@ -9,6 +9,7 @@ import { HeroLogo } from "@/components/HeroLogo";
 import { TestimoniosSection } from "@/components/TestimoniosSection";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Logo } from "@/components/ui/Logo";
 
 /** Testimonios: editá texto, autor y role en page.tsx (o después cargarlos desde CMS) */
 const TESTIMONIOS = [
@@ -292,6 +293,7 @@ export default async function Home() {
       {/* Sección contacto / footer */}
       <section id="contacto" className="border-t border-line bg-surface px-4 py-12">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
+          <Logo variant="mark" className="h-9 w-auto text-brand" />
           <div className="flex flex-wrap items-center justify-center gap-6">
             <Button href={whatsappContactUrl()} external variant="whatsapp">
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
