@@ -1,4 +1,4 @@
-import type { Category, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
+import type { Category, Detalle, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
 
 const getBaseUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -58,6 +58,21 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
   const data = json.data;
   if (Array.isArray(data) && data.length > 0) return data[0];
   return null;
+}
+
+/** Imágenes del carrusel "Detalles" de la home (activas, ordenadas) */
+export async function fetchDetalles(): Promise<Detalle[]> {
+  const params = new URLSearchParams();
+  params.set("filter[is_active][_eq]", "true");
+  params.set("sort", "sort_order");
+  params.set("fields", "id,alt,image,sort_order");
+
+  const res = await fetch(directusUrl(`/items/detalles?${params}`), {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return Array.isArray(json.data) ? json.data : [];
 }
 
 /** Categorías para filtro / menú (solo id, name, slug) */

@@ -28,6 +28,15 @@ export interface Color {
   sort_order?: number;
 }
 
+/** Imagen del carrusel "Detalles" de la home (gestionado desde Directus) */
+export interface Detalle {
+  id: number;
+  alt?: string | null;
+  /** UUID del archivo en directus_files */
+  image?: string | null;
+  sort_order?: number;
+}
+
 export interface ProductColorVariant {
   id: number;
   product?: number | Product;
