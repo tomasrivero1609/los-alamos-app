@@ -1,4 +1,4 @@
-import type { Category, Detalle, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
+import type { Category, Detalle, DirectusFile, Marca, Product, ProductColorVariant } from "@/types/directus";
 
 const getBaseUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -68,6 +68,21 @@ export async function fetchDetalles(): Promise<Detalle[]> {
   params.set("fields", "id,alt,image,sort_order");
 
   const res = await fetch(directusUrl(`/items/detalles?${params}`), {
+    next: { revalidate: 10 },
+  });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return Array.isArray(json.data) ? json.data : [];
+}
+
+/** Logos de marcas activas (ordenadas) para el carrusel "Marcas que confían" */
+export async function fetchMarcas(): Promise<Marca[]> {
+  const params = new URLSearchParams();
+  params.set("filter[is_active][_eq]", "true");
+  params.set("sort", "sort_order");
+  params.set("fields", "id,name,href,image,sort_order");
+
+  const res = await fetch(directusUrl(`/items/marcas?${params}`), {
     next: { revalidate: 10 },
   });
   if (!res.ok) return [];

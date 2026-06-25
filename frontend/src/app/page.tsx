@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { whatsappContactUrl } from "@/lib/whatsapp";
-import { fetchFeaturedProducts, fetchDetalles, assetUrl } from "@/lib/directus";
+import { fetchFeaturedProducts, fetchDetalles, fetchMarcas, assetUrl } from "@/lib/directus";
 import { TextCarousel } from "@/components/TextCarousel";
 import { ProductCard } from "@/components/ProductCard";
 import { IndumentariaCarousel } from "@/components/IndumentariaCarousel";
@@ -30,15 +30,6 @@ const TESTIMONIOS = [
   },
 ];
 
-/** Logos de marcas: colocá las imágenes en public/marcas/ y referenciálas aquí (ej. /marcas/logo-1.png) */
-const MARCAS_CAROUSEL_ITEMS = [
-  { src: "/marcas/logo-1.png", alt: "Marca 1" },
-  { src: "/marcas/logo-2.png", alt: "Marca 2" },
-  { src: "/marcas/logo-3.png", alt: "Marca 3" },
-  { src: "/marcas/logo-4.png", alt: "Marca 4" },
-  { src: "/marcas/logo-5.png", alt: "Marca 5" },
-];
-
 export default async function Home() {
   const featuredProducts = await fetchFeaturedProducts(6);
   const detalles = await fetchDetalles();
@@ -47,6 +38,14 @@ export default async function Home() {
     .map((d) => ({
       src: assetUrl(d.image as string),
       alt: d.alt || "Detalle de indumentaria laboral",
+    }));
+  const marcas = await fetchMarcas();
+  const marcasItems = marcas
+    .filter((m) => m.image)
+    .map((m) => ({
+      src: assetUrl(m.image as string),
+      alt: m.name || "Marca",
+      href: m.href || undefined,
     }));
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
   const linkedinUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL;
@@ -271,7 +270,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Marcas que confían en nosotros — carrusel de logos (fotos en public/marcas/) */}
+      {/* Marcas que confían en nosotros — carrusel de logos (gestionado desde Directus) */}
+      {marcasItems.length > 0 && (
       <section id="marcas" className="border-b border-line bg-surface px-4 py-24">
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
@@ -284,10 +284,11 @@ export default async function Home() {
             </p>
           </div>
           <div className="mt-10">
-            <MarcasCarousel items={MARCAS_CAROUSEL_ITEMS} />
+            <MarcasCarousel items={marcasItems} />
           </div>
         </div>
       </section>
+      )}
 
       {/* Sección contacto / footer */}
       <section id="contacto" className="border-t border-line bg-surface px-4 py-12">

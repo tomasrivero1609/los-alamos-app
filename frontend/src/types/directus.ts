@@ -37,6 +37,18 @@ export interface Detalle {
   sort_order?: number;
 }
 
+/** Logo de marca del carrusel "Marcas que confían" (gestionado desde Directus) */
+export interface Marca {
+  id: number;
+  /** Nombre de la marca (sirve de alt) */
+  name?: string | null;
+  /** Link opcional a la web/IG de la marca */
+  href?: string | null;
+  /** UUID del archivo del logo en directus_files */
+  image?: string | null;
+  sort_order?: number;
+}
+
 export interface ProductColorVariant {
   id: number;
   product?: number | Product;
