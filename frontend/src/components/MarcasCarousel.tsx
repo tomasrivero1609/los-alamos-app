@@ -96,7 +96,7 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
   if (items.length === 0) {
     return (
       <div className="flex h-28 w-full items-center justify-center rounded-xl bg-surface text-ink-soft">
-        Agregá logos en <code className="mx-1 rounded bg-white px-1.5 py-0.5 text-sm">public/marcas/</code> y referenciálos en la página.
+        Agregá marcas desde Directus (colección <code className="mx-1 rounded bg-white px-1.5 py-0.5 text-sm">marcas</code>).
       </div>
     );
   }
