@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Product, ProductColorVariant, Color } from "@/types/directus";
-import { getProductImageIds, getVariantImageIds, getFichaTecnicaUrl } from "@/lib/directus";
+import { getProductImageIds, getVariantImageIds, getFichaTecnicaUrl, getTablaTallesUrl } from "@/lib/directus";
 import { whatsappProductUrl } from "@/lib/whatsapp";
 import { ProductGallery } from "./ProductGallery";
 import { Button } from "@/components/ui/Button";
@@ -20,6 +20,16 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const variants = product.color_variants ?? [];
   const hasVariants = variants.length > 0;
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [tablaOpen, setTablaOpen] = useState(false);
+
+  useEffect(() => {
+    if (!tablaOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setTablaOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [tablaOpen]);
 
   const selectedVariant = hasVariants ? variants[selectedIndex] : null;
   const selectedColor = selectedVariant ? resolveColor(selectedVariant) : null;
@@ -42,6 +52,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
     product.category && typeof product.category === "object" ? product.category : null;
 
   const fichaTecnicaUrl = getFichaTecnicaUrl(product);
+  const tablaTallesUrl = getTablaTallesUrl(product);
+  const talles = Array.isArray(product.talles) ? product.talles.filter(Boolean) : [];
 
   const caracteristicasList =
     product.caracteristicas
@@ -107,6 +119,42 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
         )}
 
+        {talles.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Talles</h2>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {talles.map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex items-center rounded-md border border-line px-2.5 py-1 text-sm font-medium text-ink"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {tablaTallesUrl && (
+          <div className="mt-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Tabla de talles</h2>
+            <button
+              type="button"
+              onClick={() => setTablaOpen(true)}
+              className="mt-2 block w-full cursor-zoom-in overflow-hidden rounded-lg border border-line focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+              aria-label="Ampliar la tabla de talles"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- tabla de talles: imagen de ancho variable */}
+              <img
+                src={tablaTallesUrl}
+                alt={`Tabla de talles — ${product.name}`}
+                className="w-full"
+              />
+            </button>
+            <p className="mt-1 text-xs text-ink-soft">Tocá la imagen para ampliarla.</p>
+          </div>
+        )}
+
         {hasVariants && (
           <div className="mt-6">
             <p className="mb-2 text-sm font-medium text-ink">
@@ -168,6 +216,23 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </Button>
         </div>
       </div>
+
+      {/* Lightbox de la tabla de talles */}
+      {tablaOpen && tablaTallesUrl && (
+        <button
+          type="button"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 focus:outline-none"
+          onClick={() => setTablaOpen(false)}
+          aria-label="Cerrar tabla de talles"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- tabla en lightbox */}
+          <img
+            src={tablaTallesUrl}
+            alt={`Tabla de talles — ${product.name}`}
+            className="max-h-[90vh] w-auto max-w-[95vw] object-contain"
+          />
+        </button>
+      )}
 
       {/* Mobile: CTA sticky abajo */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 p-3 backdrop-blur lg:hidden">

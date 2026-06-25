@@ -53,6 +53,10 @@ export interface Product {
   uso_recomendado?: string | null;
   /** UUID del archivo de ficha técnica (en Directus: File, single) */
   ficha_tecnica?: string | null;
+  /** Talles disponibles (en Directus: tags / lista de strings) */
+  talles?: string[] | null;
+  /** Imagen de la tabla de talles (en Directus: File, single) */
+  tabla_talles?: string | DirectusFile | null;
   /** Variantes de color con imágenes propias y disponibilidad */
   color_variants?: ProductColorVariant[];
 }

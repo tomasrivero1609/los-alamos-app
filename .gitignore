@@ -2,6 +2,9 @@ node_modules/
 data/
 .next/
 .superpowers/
+# Carpetas de fotos de productos (subidas a Directus, no se versionan)
+campera-trucker/
+los-alamos-productos/
 .vercel/
 .env
 .env.*

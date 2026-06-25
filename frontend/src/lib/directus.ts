@@ -146,6 +146,22 @@ export function getFichaTecnicaUrl(product: Product): string | null {
   return id ? directusUrl(`/assets/${id}`) : null;
 }
 
+/** ID del archivo de la tabla de talles (campo file: UUID u objeto) */
+export function getTablaTallesId(product: Product): string | null {
+  const raw = product.tabla_talles;
+  if (!raw) return null;
+  if (typeof raw === "string") return raw;
+  if (typeof raw === "object" && raw !== null && typeof (raw as { id?: string }).id === "string")
+    return (raw as { id: string }).id;
+  return null;
+}
+
+/** URL de la imagen de la tabla de talles del producto */
+export function getTablaTallesUrl(product: Product): string | null {
+  const id = getTablaTallesId(product);
+  return id ? directusUrl(`/assets/${id}`) : null;
+}
+
 /** Todos los IDs de imagen del producto (orden del M2M en Directus) */
 export function getProductImageIds(product: Product): string[] {
   const images = product.images;
