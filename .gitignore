@@ -5,6 +5,7 @@ data/
 # Carpetas de fotos de productos (subidas a Directus, no se versionan)
 campera-trucker/
 mameluco-gabardina/
+pantalon-de-jean/
 los-alamos-productos/
 .vercel/
 .env
