@@ -55,8 +55,10 @@ export interface Product {
   ficha_tecnica?: string | null;
   /** Talles disponibles (en Directus: tags / lista de strings) */
   talles?: string[] | null;
-  /** Imagen de la tabla de talles (en Directus: File, single) */
+  /** Imagen de la tabla de talles (en Directus: File, single) — fallback */
   tabla_talles?: string | DirectusFile | null;
+  /** Tabla de talles estructurada (columnas + filas), estilada en marca */
+  tabla_medidas?: { columnas?: string[]; filas?: string[][] } | null;
   /** Variantes de color con imágenes propias y disponibilidad */
   color_variants?: ProductColorVariant[];
 }

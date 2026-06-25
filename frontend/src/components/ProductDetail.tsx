@@ -6,6 +6,7 @@ import { getProductImageIds, getVariantImageIds, getFichaTecnicaUrl, getTablaTal
 import { whatsappProductUrl } from "@/lib/whatsapp";
 import { ProductGallery } from "./ProductGallery";
 import { Button } from "@/components/ui/Button";
+import { TablaMedidas, type TablaMedidasData } from "./TablaMedidas";
 
 interface ProductDetailProps {
   product: Product;
@@ -54,6 +55,12 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const fichaTecnicaUrl = getFichaTecnicaUrl(product);
   const tablaTallesUrl = getTablaTallesUrl(product);
   const talles = Array.isArray(product.talles) ? product.talles.filter(Boolean) : [];
+  const medidas: TablaMedidasData | null =
+    product.tabla_medidas &&
+    Array.isArray(product.tabla_medidas.columnas) &&
+    product.tabla_medidas.columnas.length > 0
+      ? product.tabla_medidas
+      : null;
 
   const caracteristicasList =
     product.caracteristicas
@@ -135,23 +142,33 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
         )}
 
-        {tablaTallesUrl && (
+        {(medidas || tablaTallesUrl) && (
           <div className="mt-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Tabla de talles</h2>
-            <button
-              type="button"
-              onClick={() => setTablaOpen(true)}
-              className="mt-2 block w-full cursor-zoom-in overflow-hidden rounded-lg border border-line focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
-              aria-label="Ampliar la tabla de talles"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- tabla de talles: imagen de ancho variable */}
-              <img
-                src={tablaTallesUrl}
-                alt={`Tabla de talles — ${product.name}`}
-                className="w-full"
-              />
-            </button>
-            <p className="mt-1 text-xs text-ink-soft">Tocá la imagen para ampliarla.</p>
+            {medidas && (
+              <div className="mt-2">
+                <TablaMedidas data={medidas} />
+                <p className="mt-1.5 text-xs text-ink-soft">Medidas en centímetros.</p>
+              </div>
+            )}
+            {!medidas && tablaTallesUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setTablaOpen(true)}
+                  className="mt-2 block w-full cursor-zoom-in overflow-hidden rounded-lg border border-line focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+                  aria-label="Ampliar la tabla de talles"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- tabla de talles: imagen de ancho variable */}
+                  <img
+                    src={tablaTallesUrl}
+                    alt={`Tabla de talles — ${product.name}`}
+                    className="w-full"
+                  />
+                </button>
+                <p className="mt-1 text-xs text-ink-soft">Tocá la imagen para ampliarla.</p>
+              </>
+            )}
           </div>
         )}
 
