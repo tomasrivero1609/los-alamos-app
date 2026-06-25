@@ -57,8 +57,8 @@ export interface Product {
   talles?: string[] | null;
   /** Imagen de la tabla de talles (en Directus: File, single) — fallback */
   tabla_talles?: string | DirectusFile | null;
-  /** Tabla de talles estructurada (columnas + filas), estilada en marca */
-  tabla_medidas?: { columnas?: string[]; filas?: string[][] } | null;
+  /** Tabla de talles: filas de medidas (las columnas salen de `talles`) */
+  tabla_medidas?: { medida?: string; valores?: string }[] | null;
   /** Variantes de color con imágenes propias y disponibilidad */
   color_variants?: ProductColorVariant[];
 }

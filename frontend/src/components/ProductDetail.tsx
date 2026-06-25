@@ -6,7 +6,7 @@ import { getProductImageIds, getVariantImageIds, getFichaTecnicaUrl, getTablaTal
 import { whatsappProductUrl } from "@/lib/whatsapp";
 import { ProductGallery } from "./ProductGallery";
 import { Button } from "@/components/ui/Button";
-import { TablaMedidas, type TablaMedidasData } from "./TablaMedidas";
+import { TablaMedidas, type MedidaFila } from "./TablaMedidas";
 
 interface ProductDetailProps {
   product: Product;
@@ -55,10 +55,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const fichaTecnicaUrl = getFichaTecnicaUrl(product);
   const tablaTallesUrl = getTablaTallesUrl(product);
   const talles = Array.isArray(product.talles) ? product.talles.filter(Boolean) : [];
-  const medidas: TablaMedidasData | null =
-    product.tabla_medidas &&
-    Array.isArray(product.tabla_medidas.columnas) &&
-    product.tabla_medidas.columnas.length > 0
+  const medidas: MedidaFila[] | null =
+    Array.isArray(product.tabla_medidas) && product.tabla_medidas.length > 0
       ? product.tabla_medidas
       : null;
 
@@ -142,16 +140,16 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
         )}
 
-        {(medidas || tablaTallesUrl) && (
+        {((medidas && talles.length > 0) || tablaTallesUrl) && (
           <div className="mt-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Tabla de talles</h2>
-            {medidas && (
+            {medidas && talles.length > 0 && (
               <div className="mt-2">
-                <TablaMedidas data={medidas} />
+                <TablaMedidas talles={talles} filas={medidas} />
                 <p className="mt-1.5 text-xs text-ink-soft">Medidas en centímetros.</p>
               </div>
             )}
-            {!medidas && tablaTallesUrl && (
+            {!(medidas && talles.length > 0) && tablaTallesUrl && (
               <>
                 <button
                   type="button"
