@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { whatsappContactUrl } from "@/lib/whatsapp";
-import { fetchFeaturedProducts } from "@/lib/directus";
+import { fetchFeaturedProducts, fetchDetalles, assetUrl } from "@/lib/directus";
 import { TextCarousel } from "@/components/TextCarousel";
 import { ProductCard } from "@/components/ProductCard";
 import { IndumentariaCarousel } from "@/components/IndumentariaCarousel";
@@ -41,6 +41,13 @@ const MARCAS_CAROUSEL_ITEMS = [
 
 export default async function Home() {
   const featuredProducts = await fetchFeaturedProducts(6);
+  const detalles = await fetchDetalles();
+  const detallesImgs = detalles
+    .filter((d) => d.image)
+    .map((d) => ({
+      src: assetUrl(d.image as string),
+      alt: d.alt || "Detalle de indumentaria laboral",
+    }));
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL;
   const linkedinUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL;
   return (
@@ -162,28 +169,20 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Detalles de nuestra indumentaria — carrusel de fotos */}
-      <section id="detalles-indumentaria" className="overflow-x-hidden border-b border-line bg-white py-24">
-        <div className="mx-auto max-w-5xl px-4 text-center">
-          <Eyebrow>Detalles</Eyebrow>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
-            Detalles de nuestra indumentaria pensada para trabajadores
-          </h2>
-        </div>
-        <div className="mt-12 px-4 md:px-6">
-            {/* Reemplazá las rutas por tus fotos en public/carousel/ (ej. detalle-1.jpg, detalle-2.jpg, …) */}
-            <IndumentariaCarousel
-              images={[
-                { src: "/carousel/detalle-1.jpg", alt: "Detalle de indumentaria laboral" },
-                { src: "/carousel/detalle-2.jpg", alt: "Detalle de indumentaria laboral" },
-                { src: "/carousel/detalle-3.jpg", alt: "Detalle de indumentaria laboral" },
-                { src: "/carousel/detalle-4.jpg", alt: "Detalle de indumentaria laboral" },
-                { src: "/carousel/detalle-5.jpg", alt: "Detalle de indumentaria laboral" },
-                { src: "/carousel/detalle-6.jpg", alt: "Detalle de indumentaria laboral" },
-              ]}
-            />
-        </div>
-      </section>
+      {/* Detalles de nuestra indumentaria — carrusel de fotos (gestionado desde Directus) */}
+      {detallesImgs.length > 0 && (
+        <section id="detalles-indumentaria" className="overflow-x-hidden border-b border-line bg-white py-24">
+          <div className="mx-auto max-w-5xl px-4 text-center">
+            <Eyebrow>Detalles</Eyebrow>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+              Detalles de nuestra indumentaria pensada para trabajadores
+            </h2>
+          </div>
+          <div className="mt-12 px-4 md:px-6">
+            <IndumentariaCarousel images={detallesImgs} />
+          </div>
+        </section>
+      )}
 
       {/* Sección — ¿Cómo trabajamos en Álamos? (icono + título + texto, dividers) */}
       <section id="como-trabajamos" className="border-b border-line bg-surface px-4 py-24">

@@ -1,4 +1,4 @@
-import type { Category, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
+import type { Category, Detalle, DirectusFile, Product, ProductColorVariant } from "@/types/directus";
 
 const getBaseUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -9,7 +9,11 @@ const getBaseUrl = (): string => {
 const directusUrl = (path: string): string => `${getBaseUrl()}${path}`;
 
 /** Productos activos con categoría e imágenes (primera de images = imagen principal) */
-export async function fetchProducts(categorySlug?: string, limit?: number): Promise<Product[]> {
+export async function fetchProducts(
+  categorySlug?: string,
+  limit?: number,
+  featuredOnly = false,
+): Promise<Product[]> {
   const params = new URLSearchParams();
   params.set("filter[is_active][_eq]", "true");
   params.set("sort", "sort_order,-id");
@@ -17,6 +21,9 @@ export async function fetchProducts(categorySlug?: string, limit?: number): Prom
 
   if (categorySlug) {
     params.set("filter[category][slug][_eq]", categorySlug);
+  }
+  if (featuredOnly) {
+    params.set("filter[destacado][_eq]", "true");
   }
   if (limit != null && limit > 0) {
     params.set("limit", String(limit));
@@ -32,7 +39,7 @@ export async function fetchProducts(categorySlug?: string, limit?: number): Prom
 
 /** Productos destacados para la home (por defecto 6, ordenados por sort_order) */
 export async function fetchFeaturedProducts(count = 6): Promise<Product[]> {
-  return fetchProducts(undefined, count);
+  return fetchProducts(undefined, count, true);
 }
 
 /** Un producto por slug (para la página de detalle) */
@@ -51,6 +58,21 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
   const data = json.data;
   if (Array.isArray(data) && data.length > 0) return data[0];
   return null;
+}
+
+/** Imágenes del carrusel "Detalles" de la home (activas, ordenadas) */
+export async function fetchDetalles(): Promise<Detalle[]> {
+  const params = new URLSearchParams();
+  params.set("filter[is_active][_eq]", "true");
+  params.set("sort", "sort_order");
+  params.set("fields", "id,alt,image,sort_order");
+
+  const res = await fetch(directusUrl(`/items/detalles?${params}`), {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) return [];
+  const json = await res.json();
+  return Array.isArray(json.data) ? json.data : [];
 }
 
 /** Categorías para filtro / menú (solo id, name, slug) */
@@ -143,6 +165,22 @@ export function getFichaTecnicaId(product: Product): string | null {
 /** URL para descargar la ficha técnica del producto */
 export function getFichaTecnicaUrl(product: Product): string | null {
   const id = getFichaTecnicaId(product);
+  return id ? directusUrl(`/assets/${id}`) : null;
+}
+
+/** ID del archivo de la tabla de talles (campo file: UUID u objeto) */
+export function getTablaTallesId(product: Product): string | null {
+  const raw = product.tabla_talles;
+  if (!raw) return null;
+  if (typeof raw === "string") return raw;
+  if (typeof raw === "object" && raw !== null && typeof (raw as { id?: string }).id === "string")
+    return (raw as { id: string }).id;
+  return null;
+}
+
+/** URL de la imagen de la tabla de talles del producto */
+export function getTablaTallesUrl(product: Product): string | null {
+  const id = getTablaTallesId(product);
   return id ? directusUrl(`/assets/${id}`) : null;
 }
 

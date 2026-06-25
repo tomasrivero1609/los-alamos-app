@@ -28,6 +28,15 @@ export interface Color {
   sort_order?: number;
 }
 
+/** Imagen del carrusel "Detalles" de la home (gestionado desde Directus) */
+export interface Detalle {
+  id: number;
+  alt?: string | null;
+  /** UUID del archivo en directus_files */
+  image?: string | null;
+  sort_order?: number;
+}
+
 export interface ProductColorVariant {
   id: number;
   product?: number | Product;
@@ -44,6 +53,8 @@ export interface Product {
   description?: string | null;
   price?: number | string | null;
   is_active?: boolean;
+  /** Mostrar en "Productos destacados" de la home */
+  destacado?: boolean;
   sort_order?: number;
   category?: Category | number | null;
   images?: DirectusImageItem[];
@@ -53,6 +64,12 @@ export interface Product {
   uso_recomendado?: string | null;
   /** UUID del archivo de ficha técnica (en Directus: File, single) */
   ficha_tecnica?: string | null;
+  /** Talles disponibles (en Directus: tags / lista de strings) */
+  talles?: string[] | null;
+  /** Imagen de la tabla de talles (en Directus: File, single) — fallback */
+  tabla_talles?: string | DirectusFile | null;
+  /** Tabla de talles: filas de medidas (las columnas salen de `talles`) */
+  tabla_medidas?: { medida?: string; valores?: string }[] | null;
   /** Variantes de color con imágenes propias y disponibilidad */
   color_variants?: ProductColorVariant[];
 }
