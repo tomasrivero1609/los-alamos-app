@@ -30,7 +30,7 @@ export async function fetchProducts(
   }
 
   const res = await fetch(directusUrl(`/items/products?${params}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 10 },
   });
   if (!res.ok) return [];
   const json = await res.json();
@@ -51,7 +51,7 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
   params.set("limit", "1");
 
   const res = await fetch(directusUrl(`/items/products?${params}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 10 },
   });
   if (!res.ok) return null;
   const json = await res.json();
@@ -68,7 +68,7 @@ export async function fetchDetalles(): Promise<Detalle[]> {
   params.set("fields", "id,alt,image,sort_order");
 
   const res = await fetch(directusUrl(`/items/detalles?${params}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 10 },
   });
   if (!res.ok) return [];
   const json = await res.json();
@@ -82,7 +82,7 @@ export async function fetchCategories(): Promise<Category[]> {
   params.set("fields", "id,name,slug");
 
   const res = await fetch(directusUrl(`/items/categories?${params}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 10 },
   });
   if (!res.ok) return [];
   const json = await res.json();
