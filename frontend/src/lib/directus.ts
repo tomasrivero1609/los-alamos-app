@@ -9,7 +9,11 @@ const getBaseUrl = (): string => {
 const directusUrl = (path: string): string => `${getBaseUrl()}${path}`;
 
 /** Productos activos con categoría e imágenes (primera de images = imagen principal) */
-export async function fetchProducts(categorySlug?: string, limit?: number): Promise<Product[]> {
+export async function fetchProducts(
+  categorySlug?: string,
+  limit?: number,
+  featuredOnly = false,
+): Promise<Product[]> {
   const params = new URLSearchParams();
   params.set("filter[is_active][_eq]", "true");
   params.set("sort", "sort_order,-id");
@@ -17,6 +21,9 @@ export async function fetchProducts(categorySlug?: string, limit?: number): Prom
 
   if (categorySlug) {
     params.set("filter[category][slug][_eq]", categorySlug);
+  }
+  if (featuredOnly) {
+    params.set("filter[destacado][_eq]", "true");
   }
   if (limit != null && limit > 0) {
     params.set("limit", String(limit));
@@ -32,7 +39,7 @@ export async function fetchProducts(categorySlug?: string, limit?: number): Prom
 
 /** Productos destacados para la home (por defecto 6, ordenados por sort_order) */
 export async function fetchFeaturedProducts(count = 6): Promise<Product[]> {
-  return fetchProducts(undefined, count);
+  return fetchProducts(undefined, count, true);
 }
 
 /** Un producto por slug (para la página de detalle) */

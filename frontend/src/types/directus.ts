@@ -44,6 +44,8 @@ export interface Product {
   description?: string | null;
   price?: number | string | null;
   is_active?: boolean;
+  /** Mostrar en "Productos destacados" de la home */
+  destacado?: boolean;
   sort_order?: number;
   category?: Category | number | null;
   images?: DirectusImageItem[];
