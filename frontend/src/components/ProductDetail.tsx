@@ -70,11 +70,11 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-start">
-      <div className="w-full max-w-3xl">
+      <div className="w-full min-w-0 max-w-3xl">
         <ProductGallery imageIds={displayImageIds} productName={product.name} />
       </div>
 
-      <div className="lg:sticky lg:top-24">
+      <div className="min-w-0 lg:sticky lg:top-24">
         {category && (
           <p className="text-sm text-ink-soft">{category.name}</p>
         )}
