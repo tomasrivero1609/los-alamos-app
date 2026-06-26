@@ -69,7 +69,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const disponibilidad = selectedVariant?.disponibilidad ?? "disponible";
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-start">
+    <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
       <div className="w-full min-w-0 max-w-3xl">
         <ProductGallery imageIds={displayImageIds} productName={product.name} />
       </div>
