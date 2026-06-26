@@ -72,26 +72,40 @@ export function ProductGallery({ imageIds, productName }: ProductGalleryProps) {
 
   return (
     <>
-      {/* Grilla de miniaturas */}
+      {/* Grilla de miniaturas (máx. 4; la 4ta muestra "+N fotos" si hay más) */}
       <div className="grid w-full grid-cols-2 gap-3">
-        {imageIds.map((id, i) => (
-          <button
-            key={id}
-            type="button"
-            className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand"
-            onClick={() => open(i)}
-            aria-label={`Ampliar imagen ${i + 1} de ${n}`}
-          >
-            <Image
-              src={assetUrl(id)}
-              alt={`${productName} - imagen ${i + 1}`}
-              fill
-              className="object-cover object-center transition hover:opacity-90"
-              sizes="(max-width: 640px) 50vw, 45vw"
-              unoptimized={assetsAreLocal()}
-            />
-          </button>
-        ))}
+        {imageIds.slice(0, 4).map((id, i) => {
+          const extra = imageIds.length - 4;
+          const showMore = i === 3 && extra > 0;
+          return (
+            <button
+              key={id}
+              type="button"
+              className="group relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand"
+              onClick={() => open(i)}
+              aria-label={showMore ? `Ver las ${n} fotos` : `Ampliar imagen ${i + 1} de ${n}`}
+            >
+              <Image
+                src={assetUrl(id)}
+                alt={`${productName} - imagen ${i + 1}`}
+                fill
+                className="object-cover object-center transition group-hover:opacity-90"
+                sizes="(max-width: 640px) 50vw, 45vw"
+                unoptimized={assetsAreLocal()}
+              />
+              {showMore && (
+                <span className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 bg-black/40 text-white transition group-hover:bg-black/50">
+                  <span className="text-2xl font-bold leading-none [text-shadow:0_1px_4px_rgba(0,0,0,0.75)]">
+                    +{extra}
+                  </span>
+                  <span className="text-xs font-semibold uppercase tracking-wide [text-shadow:0_1px_3px_rgba(0,0,0,0.75)]">
+                    fotos
+                  </span>
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Lightbox / carrusel */}
