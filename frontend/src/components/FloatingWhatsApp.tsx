@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import type { WhatsAppLine } from "@/lib/whatsapp";
 import { whatsappUrl } from "@/lib/whatsapp";
 
@@ -10,8 +11,12 @@ interface FloatingWhatsAppProps {
 
 export function FloatingWhatsApp({ lines }: FloatingWhatsAppProps) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   if (lines.length === 0) return null;
+  // En el detalle de producto el CTA principal es "Consultar por WhatsApp";
+  // ocultamos el flotante para que no se dupliquen ni se pisen (sobre todo en mobile).
+  if (pathname?.startsWith("/producto/")) return null;
 
   // Una sola línea: el botón abre WhatsApp directo
   if (lines.length === 1) {
