@@ -47,12 +47,13 @@ export default async function ProductoPage({ params }: Props) {
         ? product.category.name
         : undefined,
   };
+  const jsonLdScript = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 pb-28 lg:pb-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript }}
       />
       <nav className="mb-6 text-sm text-ink-soft" aria-label="Migas de pan">
         <Link href="/" className="hover:text-ink">Inicio</Link>

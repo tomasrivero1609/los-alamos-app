@@ -99,10 +99,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
         {product.description && (
           <div className="mt-6">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Descripción</h2>
-            <div
-              className="mt-2 text-base text-ink-soft [&>p]:mb-2"
-              dangerouslySetInnerHTML={{ __html: String(product.description).replace(/\n/g, "<br />") }}
-            />
+            <p className="mt-2 whitespace-pre-line text-base text-ink-soft">
+              {product.description}
+            </p>
           </div>
         )}
 

@@ -1,5 +1,21 @@
 import { NextResponse } from "next/server";
-import { sendCotizacionEmail } from "@/lib/mail";
+import { sendCotizacionEmails, type CotizacionData } from "@/lib/mail";
+
+export const runtime = "nodejs";
+
+const MAX_LENGTHS = {
+  nombre: 120,
+  email: 254,
+  telefono: 80,
+  empresa: 160,
+  productos_interes: 2000,
+  cantidad_aprox: 120,
+  plazo_deseado: 120,
+  comentarios: 4000,
+  como_nos_conocio: 120,
+} as const;
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const getDirectusUrl = (): string => {
   const url = process.env.NEXT_PUBLIC_DIRECTUS_URL;
@@ -7,39 +23,55 @@ const getDirectusUrl = (): string => {
   return url.replace(/\/$/, "");
 };
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function cleanText(
+  body: Record<string, unknown>,
+  field: keyof typeof MAX_LENGTHS
+): string {
+  const value = body[field];
+  if (value == null) return "";
+  return String(value).trim().slice(0, MAX_LENGTHS[field]);
+}
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const {
-      nombre,
-      email,
-      telefono,
-      empresa = "",
-      productos_interes = "",
-      cantidad_aprox = "",
-      plazo_deseado = "",
-      comentarios = "",
-      como_nos_conocio = "",
-    } = body;
+    const body = await request.json().catch(() => null);
 
-    if (!nombre?.trim() || !email?.trim() || !telefono?.trim()) {
+    if (!isRecord(body)) {
+      return NextResponse.json(
+        { error: "El cuerpo de la solicitud no es válido." },
+        { status: 400 }
+      );
+    }
+
+    const cleaned: CotizacionData = {
+      nombre: cleanText(body, "nombre"),
+      email: cleanText(body, "email").toLowerCase(),
+      telefono: cleanText(body, "telefono"),
+      empresa: cleanText(body, "empresa") || null,
+      productos_interes: cleanText(body, "productos_interes") || null,
+      cantidad_aprox: cleanText(body, "cantidad_aprox") || null,
+      plazo_deseado: cleanText(body, "plazo_deseado") || null,
+      comentarios: cleanText(body, "comentarios") || null,
+      como_nos_conocio: cleanText(body, "como_nos_conocio") || null,
+    };
+
+    if (!cleaned.nombre || !cleaned.email || !cleaned.telefono) {
       return NextResponse.json(
         { error: "Nombre, email y teléfono son obligatorios." },
         { status: 400 }
       );
     }
 
-    const cleaned = {
-      nombre: String(nombre).trim(),
-      email: String(email).trim(),
-      telefono: String(telefono).trim(),
-      empresa: String(empresa).trim() || null,
-      productos_interes: String(productos_interes).trim() || null,
-      cantidad_aprox: String(cantidad_aprox).trim() || null,
-      plazo_deseado: String(plazo_deseado).trim() || null,
-      comentarios: String(comentarios).trim() || null,
-      como_nos_conocio: String(como_nos_conocio).trim() || null,
-    };
+    if (!EMAIL_PATTERN.test(cleaned.email)) {
+      return NextResponse.json(
+        { error: "Ingresá un email válido." },
+        { status: 400 }
+      );
+    }
 
     const directusUrl = getDirectusUrl();
     const res = await fetch(`${directusUrl}/items/cotizaciones`, {
@@ -57,12 +89,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // Enviar email de notificación (no bloquea la respuesta al usuario)
-    sendCotizacionEmail(cleaned).catch((err) =>
-      console.error("Error al enviar email de cotización:", err)
-    );
+    const emailResult = await sendCotizacionEmails(cleaned);
 
-    return NextResponse.json({ ok: true });
+    if (!emailResult.sent) {
+      console.warn(
+        "Cotización guardada, pero uno o más emails no se enviaron:",
+        emailResult
+      );
+      return NextResponse.json({
+        ok: true,
+        warning:
+          "Recibimos la cotización, pero no se pudo enviar uno de los emails de confirmación.",
+        emails: emailResult,
+      });
+    }
+
+    return NextResponse.json({ ok: true, emails: emailResult });
   } catch (e) {
     console.error("Cotizacion API error:", e);
     return NextResponse.json(

@@ -20,3 +20,5 @@ los-alamos-productos/
 .env
 .env.*
 *.log
+!.env.example
+!frontend/.env.example
